@@ -7,6 +7,7 @@ import { getEnvFilePath } from './common/helper';
 import { UserGroupModule } from './user-group/user-group.module';
 import { AuthModule } from './auth/auth.module';
 import { TaskModule } from './task/task.module';
+import { CronModule } from './cron/cron.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { TaskModule } from './task/task.module';
     UserModule,
     UserGroupModule,
     TaskModule,
+    CronModule,
   ],
   controllers: [],
   providers: [],

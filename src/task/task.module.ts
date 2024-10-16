@@ -9,5 +9,6 @@ import { UserGroupModule } from 'src/user-group/user-group.module';
   imports: [DbModule, UserModule, UserGroupModule],
   controllers: [TaskController],
   providers: [TaskService],
+  exports: [TaskService],
 })
 export class TaskModule {}
