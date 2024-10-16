@@ -8,7 +8,7 @@ export class CreateTaskDto {
   description?: string;
 
   @IsDateString()
-  dueDate: string;
+  dueDate?: string;
 
   @IsMongoId()
   @IsOptional()

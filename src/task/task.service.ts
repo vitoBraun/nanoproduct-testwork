@@ -19,9 +19,7 @@ export class TaskService {
       ...(query.dueDate && { dueDate: { $lte: query.dueDate } }),
       ...(query.status && { status: query.status }),
     };
-    return this.taskModel.find({
-      ...conditions,
-    });
+    return this.taskModel.find(conditions);
   }
 
   async getTasksByGroupId({ assignedToGroupId, query }) {
@@ -30,9 +28,7 @@ export class TaskService {
       ...(query.dueDate && { dueDate: { $lte: query.dueDate } }),
       ...(query.status && { status: query.status }),
     };
-    return this.taskModel.find({
-      ...conditions,
-    });
+    return this.taskModel.find(conditions);
   }
 
   async updateTaskById({ id, task, assignedToUser }) {
@@ -41,9 +37,7 @@ export class TaskService {
         _id: id,
         assignedToUser,
       },
-      {
-        ...task,
-      },
+      task,
       { new: true, useFindAndModify: false },
     );
   }
