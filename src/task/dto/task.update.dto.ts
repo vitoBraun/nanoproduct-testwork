@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { statuses } from '../task.schema';
 
-export class CreateTaskDto {
+export class UpdateTaskDto {
   @IsString()
   @IsOptional()
   title: string;
@@ -30,5 +30,5 @@ export class CreateTaskDto {
 
   @IsMongoId()
   @IsOptional()
-  ssignedToGroup?: string;
+  assignedToGroup?: string;
 }

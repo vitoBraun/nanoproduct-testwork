@@ -16,4 +16,17 @@ export class TaskService {
   async getTasksByUserId(id) {
     return this.taskModel.find({ assignedToUser: id });
   }
+
+  async updateTaskById({ id, task, userId }) {
+    return this.taskModel.findOneAndUpdate(
+      {
+        _id: id,
+        assignedToUser: userId,
+      },
+      {
+        ...task,
+      },
+      { new: true, useFindAndModify: false },
+    );
+  }
 }
