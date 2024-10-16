@@ -74,10 +74,15 @@ export class TaskController {
 
   @Patch('/update/:id')
   @RoleGuard('admin')
-  updateTaskOfUser(@Param() { id }: IdDTO, @Body() task: UpdateTaskDto) {
+  updateTaskOfUser(
+    @Param() { id }: IdDTO,
+    @Body() task: UpdateTaskDto,
+    @User() user,
+  ) {
     return this.taskService.updateTaskById({
       id,
       task,
+      responsibleUser: user,
     });
   }
 }

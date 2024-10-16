@@ -4,6 +4,7 @@ import { TaskDocument } from './task.schema';
 import { Model } from 'mongoose';
 import { UserService } from 'src/user/user.service';
 import { UserGroupService } from 'src/user-group/user-group.service';
+import { TaskHistoryService } from './task-history.service';
 
 @Injectable()
 export class TaskService {
@@ -11,10 +12,18 @@ export class TaskService {
     @InjectModel('Task') private readonly taskModel: Model<TaskDocument>,
     private readonly userService: UserService,
     private readonly userGroupService: UserGroupService,
+    private taskHistoryService: TaskHistoryService,
   ) {}
 
   async addTask(task) {
-    return this.taskModel.create(task);
+    const newTask = await this.taskModel.create(task);
+    this.taskHistoryService.logHistory(
+      newTask.id,
+      'created',
+      task.assignedToUser,
+      task,
+    );
+    return newTask;
   }
 
   async getTasksByUserId({ assignedToUserId, query }) {
@@ -57,7 +66,8 @@ export class TaskService {
     if (!existingUser) {
       throw new NotFoundException('Пользователь не найден');
     }
-    return this.taskModel.findOneAndUpdate(
+
+    const updatedTask = await this.taskModel.findOneAndUpdate(
       {
         _id: id,
         assignedToUser,
@@ -65,19 +75,40 @@ export class TaskService {
       task,
       { new: true, useFindAndModify: false },
     );
+
+    this.taskHistoryService.logHistory(
+      updatedTask.id,
+      'updated',
+      task.assignedToUser,
+      task,
+    );
+
+    return updatedTask;
   }
 
-  async updateTaskById({ id, task }) {
+  async updateTaskById({ id, task, responsibleUser }) {
     const existingTask = await this.taskModel.findById(id);
     if (!existingTask) {
       throw new NotFoundException('Задача не найдена');
     }
-    return this.taskModel.findOneAndUpdate(
+
+    const updatedTask = await this.taskModel.findOneAndUpdate(
       {
         _id: id,
       },
       task,
       { new: true, useFindAndModify: false },
     );
+
+    if (updatedTask) {
+      this.taskHistoryService.logHistory(
+        updatedTask.id,
+        'updated',
+        responsibleUser.id,
+        task,
+      );
+    }
+
+    return updatedTask;
   }
 }
