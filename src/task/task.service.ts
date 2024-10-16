@@ -13,15 +13,33 @@ export class TaskService {
     return this.taskModel.create(task);
   }
 
-  async getTasksByUserId(id) {
-    return this.taskModel.find({ assignedToUser: id });
+  async getTasksByUserId({ assignedToUserId, query }) {
+    const conditions = {
+      assignedToUser: assignedToUserId,
+      ...(query.dueDate && { dueDate: { $lte: query.dueDate } }),
+      ...(query.status && { status: query.status }),
+    };
+    return this.taskModel.find({
+      ...conditions,
+    });
   }
 
-  async updateTaskById({ id, task, userId }) {
+  async getTasksByGroupId({ assignedToGroupId, query }) {
+    const conditions = {
+      assignedToGroup: assignedToGroupId,
+      ...(query.dueDate && { dueDate: { $lte: query.dueDate } }),
+      ...(query.status && { status: query.status }),
+    };
+    return this.taskModel.find({
+      ...conditions,
+    });
+  }
+
+  async updateTaskById({ id, task, assignedToUser }) {
     return this.taskModel.findOneAndUpdate(
       {
         _id: id,
-        assignedToUser: userId,
+        assignedToUser,
       },
       {
         ...task,
