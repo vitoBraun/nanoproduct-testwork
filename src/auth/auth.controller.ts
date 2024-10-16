@@ -27,8 +27,8 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  @UseGuards(LocalAuthGuard)
   @Public()
+  @UseGuards(LocalAuthGuard)
   @HttpCode(200)
   async login(@Body() loginDto: LoginDto) {
     const user = await this.authService.validateUser(
