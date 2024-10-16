@@ -48,29 +48,11 @@ export class UserService {
     return this.userModel.findOne({ email });
   }
 
-  async updateUser(
-    id: string,
-    {
-      email,
-      password,
-      role,
-      group,
-    }: {
-      email: string;
-      password: string;
-      role: string;
-      group: string;
-    },
-  ) {
+  async updateUser(id: string, user) {
     return this.userModel.findOneAndUpdate(
       { _id: id },
       {
-        $set: {
-          ...(email && { email }),
-          ...(password && { password: await this.getPasswordHash(password) }),
-          ...(role && { role }),
-          ...(group && { group }),
-        },
+        ...user,
       },
       { new: true, useFindAndModify: false },
     );

@@ -11,21 +11,21 @@ import { IsIn } from 'class-validator';
 export class UpdateUserDTO {
   @IsEmail()
   @IsOptional()
-  readonly email: string;
+  readonly email?: string;
 
   @IsNotEmpty()
   @MinLength(6)
   @IsOptional()
-  readonly password: string;
+  readonly password?: string;
 
   @IsNotEmpty()
   @IsString()
   @IsIn(roles)
   @IsOptional()
-  role: string;
+  role?: string;
 
   @IsNotEmpty()
   @IsMongoId()
   @IsOptional()
-  group: string;
+  group?: string;
 }
