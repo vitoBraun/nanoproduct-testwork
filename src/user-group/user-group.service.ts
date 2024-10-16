@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserGroupDocument } from './user-group.schema';
 import { Model } from 'mongoose';
@@ -31,5 +35,17 @@ export class UserGroupService {
 
   async getUserGroupById(id: string) {
     return this.userGroupModel.findById(id);
+  }
+
+  async getUserGroups() {
+    return this.userGroupModel.find();
+  }
+
+  async deleteUserGroup(id: string) {
+    const existingGroup = await this.userGroupModel.findById(id);
+    if (!existingGroup) {
+      throw new NotFoundException('Команда не найдена');
+    }
+    return this.userGroupModel.findByIdAndDelete(id);
   }
 }

@@ -17,6 +17,7 @@ import { UpdateUserDTO } from './dto/user.update.dto';
 import { IdDTO } from 'src/common/dto/id.dto';
 
 @Controller('user')
+@RoleGuard('admin')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -24,7 +25,6 @@ export class UserController {
   ) {}
 
   @Post()
-  @RoleGuard('admin')
   async addUser(@Body() body: CreateUserDTO) {
     const existedGroup = await this.userGroupService.getUserGroupById(
       body.group,
@@ -37,19 +37,16 @@ export class UserController {
   }
 
   @Patch('/:id')
-  @RoleGuard('admin')
   async updateUser(@Body() body: UpdateUserDTO, @Param() { id }: IdDTO) {
     return this.userService.updateUser(id, body);
   }
 
   @Delete('/:id')
-  @RoleGuard('admin')
   async deleteUser(@Param() { id }: IdDTO) {
     return this.userService.deleteUser(id);
   }
 
   @Get('list')
-  @RoleGuard('admin')
   async getUsersList() {
     return this.userService.getUsersList();
   }

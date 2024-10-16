@@ -38,7 +38,7 @@ export class TaskController {
     @Body() task: UpdateTaskDto,
     @User() user,
   ) {
-    return this.taskService.updateTaskById({
+    return this.taskService.updateTaskAssignedToUser({
       id,
       task,
       assignedToUser: user.id,
@@ -61,6 +61,23 @@ export class TaskController {
     return this.taskService.getTasksByGroupId({
       assignedToGroupId: id,
       query,
+    });
+  }
+
+  @Get('/list/all')
+  @RoleGuard('admin')
+  getAllTasks(@Query() query: TaskListQueryDTO) {
+    return this.taskService.getTasks({
+      query,
+    });
+  }
+
+  @Patch('/update/:id')
+  @RoleGuard('admin')
+  updateTaskOfUser(@Param() { id }: IdDTO, @Body() task: UpdateTaskDto) {
+    return this.taskService.updateTaskById({
+      id,
+      task,
     });
   }
 }
