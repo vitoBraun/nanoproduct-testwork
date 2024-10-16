@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getEnvFilePath } from './common/helper';
 import { UserGroupModule } from './user-group/user-group.module';
 import { AuthModule } from './auth/auth.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     UserModule,
     UserGroupModule,
+    TaskModule,
   ],
   controllers: [],
   providers: [],
