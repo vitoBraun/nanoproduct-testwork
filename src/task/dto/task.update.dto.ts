@@ -1,4 +1,10 @@
-import { IsDate, IsIn, IsMongoId, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsIn,
+  IsMongoId,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { statuses } from '../task.schema';
 
 export class CreateTaskDto {
@@ -10,13 +16,13 @@ export class CreateTaskDto {
   @IsOptional()
   description?: string;
 
-  @IsDate()
+  @IsDateString()
   @IsOptional()
-  dueDate: Date;
+  dueDate?: Date;
 
   @IsIn(statuses)
   @IsOptional()
-  status: string;
+  status?: string;
 
   @IsMongoId()
   @IsOptional()

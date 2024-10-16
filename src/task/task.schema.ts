@@ -18,7 +18,10 @@ export class Task {
   @Prop({ enum: statuses, default: 'created' })
   status?: string;
 
-  @Prop()
+  @Prop({ type: Date, default: Date.now })
+  creationDate: Date;
+
+  @Prop({ type: Date, required: false })
   dueDate?: Date;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: false })

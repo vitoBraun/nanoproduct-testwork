@@ -10,6 +10,10 @@ export class TaskService {
   ) {}
 
   async addTask(task) {
-    this.taskModel.create(task);
+    return this.taskModel.create(task);
+  }
+
+  async getTasksByUserId(id) {
+    return this.taskModel.find({ assignedToUser: id });
   }
 }

@@ -1,4 +1,4 @@
-import { IsDate, IsMongoId, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsMongoId, IsOptional, IsString } from 'class-validator';
 
 export class CreateTaskDto {
   @IsString()
@@ -7,8 +7,8 @@ export class CreateTaskDto {
   @IsString()
   description?: string;
 
-  @IsDate()
-  dueDate: Date;
+  @IsDateString()
+  dueDate: string;
 
   @IsMongoId()
   @IsOptional()
