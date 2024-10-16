@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserDocument } from './user.schema';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -69,6 +73,20 @@ export class UserService {
         },
       },
       { new: true, useFindAndModify: false },
+    );
+  }
+
+  async deleteUser(id: string) {
+    const existingUser = await this.userModel.findById(id);
+    if (!existingUser) {
+      throw new NotFoundException('Пользователь с таким ID не найден');
+    }
+    return this.userModel.findByIdAndDelete(id);
+  }
+
+  async getUsersList() {
+    return (await this.userModel.find()).map((user) =>
+      this.transformUser(user),
     );
   }
 

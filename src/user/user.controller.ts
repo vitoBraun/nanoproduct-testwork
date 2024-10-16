@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -22,10 +23,6 @@ export class UserController {
     private readonly userGroupService: UserGroupService,
   ) {}
 
-  //admin
-  @Get('list')
-  getUsersList() {}
-
   @Post()
   @RoleGuard('admin')
   async addUser(@Body() body: CreateUserDTO) {
@@ -43,5 +40,17 @@ export class UserController {
   @RoleGuard('admin')
   async updateUser(@Body() body: UpdateUserDTO, @Param() { id }: IdDTO) {
     return this.userService.updateUser(id, body);
+  }
+
+  @Delete('/:id')
+  @RoleGuard('admin')
+  async deleteUser(@Param() { id }: IdDTO) {
+    return this.userService.deleteUser(id);
+  }
+
+  @Get('list')
+  @RoleGuard('admin')
+  async getUsersList() {
+    return this.userService.getUsersList();
   }
 }
