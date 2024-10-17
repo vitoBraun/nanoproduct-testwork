@@ -17,8 +17,8 @@ export class User {
   @Prop({ required: true, enum: roles })
   role: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'UserGroup', required: true })
-  group: UserGroup;
+  @Prop({ type: Types.ObjectId, ref: 'UserGroup', required: false })
+  group?: UserGroup;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -18,12 +18,10 @@ export class UserService {
     email,
     password,
     role,
-    group,
   }: {
     email: string;
     password: string;
     role: string;
-    group: string;
   }) {
     const existingUser = await this.userModel.findOne({ email });
     if (existingUser) {
@@ -34,14 +32,14 @@ export class UserService {
       email,
       passwordHash: await this.getPasswordHash(password),
       role,
-      group,
+      // group,
     });
     await user.save();
     return this.transformUser(user);
   }
 
   async getUserById(id) {
-    return this.userModel.findById(id);
+    return this.userModel.findById(id).then((user) => this.transformUser(user));
   }
 
   async findUserByEmail(email: string) {
@@ -81,7 +79,7 @@ export class UserService {
     return {
       id: user._id.toString(),
       email: user.email,
-      type: user.type,
+      role: user.role,
       group: user.group,
     };
   }
