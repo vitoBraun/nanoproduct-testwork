@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { UserService } from 'src/user/user.service';
 import { UserGroupService } from 'src/user-group/user-group.service';
 import { TaskHistoryService } from './task-history.service';
+import { eventNames, SocketGateway } from 'src/socket/socket.gateway';
 
 @Injectable()
 export class TaskService {
@@ -13,6 +14,7 @@ export class TaskService {
     private readonly userService: UserService,
     private readonly userGroupService: UserGroupService,
     private taskHistoryService: TaskHistoryService,
+    private socketGateway: SocketGateway,
   ) {}
 
   async addTask(task) {
@@ -67,6 +69,11 @@ export class TaskService {
       throw new NotFoundException('Пользователь не найден');
     }
 
+    const existingTask = await this.taskModel.findById(id);
+    if (!existingTask) {
+      throw new NotFoundException('Задача не найдена');
+    }
+
     const updatedTask = await this.taskModel.findOneAndUpdate(
       {
         _id: id,
@@ -75,6 +82,10 @@ export class TaskService {
       task,
       { new: true, useFindAndModify: false },
     );
+
+    if (existingTask.status === task.status) {
+      this.socketGateway.emitToClient(eventNames.updateTask, updatedTask);
+    }
 
     this.taskHistoryService.logHistory(
       updatedTask.id,
@@ -99,6 +110,10 @@ export class TaskService {
       task,
       { new: true, useFindAndModify: false },
     );
+
+    if (existingTask.status === task.status) {
+      this.socketGateway.emitToClient(eventNames.updateTask, updatedTask);
+    }
 
     if (updatedTask) {
       this.taskHistoryService.logHistory(
