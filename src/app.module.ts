@@ -8,6 +8,7 @@ import { UserGroupModule } from './user-group/user-group.module';
 import { AuthModule } from './auth/auth.module';
 import { TaskModule } from './task/task.module';
 import { CronModule } from './cron/cron.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { CronModule } from './cron/cron.module';
     UserGroupModule,
     TaskModule,
     CronModule,
+    SocketModule,
   ],
   controllers: [],
   providers: [],
