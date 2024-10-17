@@ -22,6 +22,12 @@ const clientUser = {
   role: 'user',
 };
 
+const newTask = {
+  title: 'Задача номер 1',
+  description: 'Описание задачи ...',
+  dueDate: '2024-10-19T00:00:00Z',
+};
+
 describe('App (e2e)', () => {
   let app: INestApplication;
   let configService: ConfigService;
@@ -134,6 +140,19 @@ describe('App (e2e)', () => {
       .delete(`/user/${clientUserId}`)
       .set('Cookie', [adminAuthCookie])
       .expect(200);
+  });
+
+  // TASK
+
+  it('should create new task', async () => {
+    const res = await request(app.getHttpServer())
+      .post(`/task/`)
+      .set('Cookie', [adminAuthCookie])
+      .send(newTask)
+      .expect(201);
+
+    expect(res.body.title).toEqual(newTask.title);
+    expect(res.body.description).toEqual(newTask.description);
   });
 
   // END //
